@@ -1,0 +1,12 @@
+---
+- name: Install packages
+  ansible.builtin.include_tasks:
+    file: install_packages.yml
+
+- name: Configure laptop
+  ansible.builtin.include_tasks:
+    file: laptop.yml
+
+- name: Configure system for SSD storage
+  ansible.builtin.include_tasks:
+    file: ssd.yml

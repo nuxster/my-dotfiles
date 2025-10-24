@@ -1,0 +1,8 @@
+---
+- name: Configure regular user
+  ansible.builtin.include_tasks:
+    file: users/regular.yml
+
+- name: Configure super user
+  ansible.builtin.include_tasks:
+    file: users/super.yml

@@ -1,0 +1,17 @@
+[Unit]
+Description=SSH Key agent.
+
+[Service]
+Type=simple
+StandardError=journal
+EnvironmentFile={{ env_file }}
+Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
+ExecStart=/usr/bin/ssh-agent -D -a $SSH_AUTH_SOCK
+ExecReload=kill -SIGUSR2 $MAINPID
+ExecStop=/bin/kill -2 $MAINPID
+Restart=always
+RestartSec=1
+TimeoutStopSec=10
+
+[Install]
+WantedBy=default.target

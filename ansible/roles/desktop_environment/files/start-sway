@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Загрузить переменные из файла без export, игнорируя строки с #
+if [ -f "$HOME/.config/sway/env" ]; then
+  while IFS='=' read -r key value || [ -n "$key" ]; do
+    # Пропускаем пустые строки и строки комментариев
+    if [ -z "$key" ] || echo "$key" | grep -q '^#'; then
+      continue
+    fi
+    # Убрать возможные пробелы вокруг ключа и значения
+    key=$(echo "$key" | xargs)
+    value=$(echo "$value" | xargs)
+    export "$key=$value"
+  done < "$HOME/.config/sway/env"
+fi
+
+exec sway "$@" 2>/dev/null

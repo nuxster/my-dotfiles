@@ -1,0 +1,15 @@
+---
+- name: Install packages
+  become: true
+  block:
+    - name: Install system utilites packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: latest
+        install_recommends: false
+      loop:
+        - "{{ system_utilites_packages }}"
+
+    - name: Deleting downloaded packages that are no longer required
+      ansible.builtin.apt:
+        clean: true

@@ -1,0 +1,22 @@
+---
+- name: Configure timezone and time synchronization
+  become: true
+  block:
+    - name: Set timezone to {{ TIMEZONE }}
+      community.general.timezone:
+        name: "{{ TIMEZONE }}"
+
+    - name: Configure use RTC in UTC
+      ansible.builtin.command:
+        cmd: timedatectl set-local-rtc 0
+      register: rtc_in_utc
+      changed_when: false
+      failed_when: rtc_in_utc.rc not in [0, 1]
+
+    - name: Install chrony package
+      ansible.builtin.apt:
+        name: chrony
+        state: present
+        install_recommends: false
+      when:
+        - NTP_DAEMON

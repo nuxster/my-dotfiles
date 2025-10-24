@@ -1,0 +1,8 @@
+---
+- name: Install packages
+  ansible.builtin.include_tasks:
+    file: install_packages.yml
+
+- name: Configure GUI
+  ansible.builtin.include_tasks:
+    file: configure_gui.yml

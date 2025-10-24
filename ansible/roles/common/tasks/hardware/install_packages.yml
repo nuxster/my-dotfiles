@@ -1,0 +1,13 @@
+---
+- name: Install packages
+  become: true
+  block:
+    - name: Install drivers & kernel headers
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop:
+        - "{{ kernel_headers_packages }}"
+        - "{{ microcode_packages }}"
+        - "{{ firmware_packages }}"

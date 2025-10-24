@@ -1,0 +1,11 @@
+---
+- name: Uninstall packages
+  become: true
+  block:
+    - name: Uninstall vim
+      ansible.builtin.apt:
+        name: "{{ item }}" 
+        state: absent
+        autoremove: true
+        purge: true
+      loop: "{{ vim_packages }}"

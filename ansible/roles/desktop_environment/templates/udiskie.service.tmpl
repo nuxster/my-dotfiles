@@ -1,0 +1,18 @@
+[Unit]
+Description=Automounter for removable media.
+BindsTo=sway-session.target
+
+[Service]
+Type=simple
+StandardError=journal
+EnvironmentFile={{ env_file }}
+Environment=WAYLAND_DISPLAY=wayland-1
+ExecStart=/usr/bin/udiskie --automount --smart-tray --notify --appindicator --no-menu-checkbox-workaround --no-menu-update-workaround --file-manager=thunar
+ExecReload=kill -SIGUSR2 $MAINPID
+ExecStop=/bin/kill -2 $MAINPID
+Restart=always
+RestartSec=1
+TimeoutStopSec=10
+
+[Install]
+WantedBy=sway-session.target

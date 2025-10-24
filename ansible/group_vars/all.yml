@@ -1,0 +1,37 @@
+---
+# CPU manufacturer: intel or amd
+CPU: intel
+
+# Are you on: desktop, laptop or vm
+DESTINATION_DEVICE: desktop
+
+# The name of your user in the system
+USERNAME: nuxster
+
+# User's shell
+SHELL: fish
+
+# User's timezone
+TIMEZONE: Europe/Moscow
+
+# List of SSD devices or undefined
+SSD_DEVICES:
+  # e.g. for desktop or laptop
+  - nvme0n1
+  # e.g. for virtual machine
+  #- vda
+
+# Install Libre Office packages
+OFFICE: false
+
+# Install hypervisor (QEMU/Libvirt)
+HYPERVISOR: false
+
+# Install neovim packages
+INSTALL_NEOVIM: true
+
+# Upgrade all packages
+UPGRADE_PACKAGES: true
+
+# Install ntp daemon (ntpd/chrony) packages
+NTP_DAEMON: true

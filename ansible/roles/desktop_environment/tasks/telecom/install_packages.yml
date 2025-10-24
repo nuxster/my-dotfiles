@@ -1,0 +1,25 @@
+---
+- name: Install packages
+  become: true
+  block:
+    - name: Install additional packages for networking
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: latest
+        install_recommends: false
+      loop:
+        - "{{ network_manager_packages }}"
+        - "{{ wifi_support_packages }}"
+        - "{{ network_utilites_packages }}"
+
+    - name: Install packages for bluetooth support
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: latest
+        install_recommends: false
+      loop:
+        - "{{ bluetooth_support_packages }}"
+
+    - name: Deleting downloaded packages that are no longer required
+      ansible.builtin.apt:
+        clean: true

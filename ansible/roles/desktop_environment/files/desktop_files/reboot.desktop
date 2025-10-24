@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=reboot
+Comment=Reboot system
+Exec=sudo reboot
+Icon=system-reboot
+Type=Application

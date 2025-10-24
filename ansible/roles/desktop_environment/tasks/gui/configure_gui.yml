@@ -1,0 +1,175 @@
+---
+- name: Copy user dotfiles
+  ansible.builtin.copy:
+    src: "dotfiles/{{ item }}"
+    dest: "{{ lookup('env','HOME') }}"
+    owner: "{{ USERNAME }}"
+    group: "{{ USERNAME }}"
+  loop: "{{ all_dotfiles }}"
+
+- name: Configure greetd
+  become: true
+  ansible.builtin.blockinfile:
+    path: /etc/greetd/config.toml
+    marker: "# {mark} ANSIBLE MANAGED BLOCK initial_session"
+    block: |
+      [initial_session]
+      command = "/usr/local/bin/start-sway"
+      user = "{{ USERNAME }}"
+
+- name: Copy the sway runner wrapper
+  become: true
+  ansible.builtin.copy:
+    src: start-sway
+    dest: /usr/local/bin/start-sway
+    mode: '0755'
+
+- name: Create user environment file
+  ansible.builtin.template:
+    src: user_environment_file.tmpl
+    dest: "{{ [lookup('env','HOME'), user_environment_file] | path_join }}"
+    owner: "{{ USERNAME }}"
+    group: "{{ USERNAME }}"
+    mode: '0644'
+  vars:
+    user_home_dir: "{{ lookup('env','HOME') }}"
+
+- name: Create user systemd units
+  block:
+    - name: Create user systemd units | Create systemd unit files
+      ansible.builtin.template:
+        src: "{{ item }}.tmpl"
+        dest: "{{ [lookup('env','HOME'), user_systemd_dir, item] | path_join }}"
+        owner: "{{ USERNAME }}"
+        group: "{{ USERNAME }}"
+        mode: '0644'
+      loop: "{{ user_systemd_units }}"
+      vars:
+        env_file: "{{ [lookup('env','HOME'), user_environment_file] | path_join }}"
+
+    - name: Create user systemd units | Enable user lingering
+      become: true
+      ansible.builtin.command:
+        cmd: loginctl enable-linger {{ USERNAME }}
+
+    - name: Create user systemd units | Get user UID
+      ansible.builtin.getent:
+        database: passwd
+        key: "{{ USERNAME }}"
+
+    - name: Create user systemd units | Enable user systemd units
+      ansible.builtin.systemd_service:
+        name: "{{ item }}"
+        force: true
+        enabled: true
+        scope: user
+        daemon_reload: true
+      loop: "{{ user_systemd_units }}"
+      become_user: "{{ USERNAME }}"
+      environment:
+        XDG_RUNTIME_DIR: "/run/user/{{ ansible_facts.getent_passwd[USERNAME].1 }}"
+
+- name: Create user sway session target
+  ansible.builtin.template:
+    src: "{{ user_sway_session_target }}.tmpl"
+    dest: "{{ [lookup('env','HOME'), user_systemd_dir, user_sway_session_target] | path_join }}"
+    owner: "{{ USERNAME }}"
+    group: "{{ USERNAME }}"
+    mode: '0644'
+
+- name: Create user directories
+  ansible.builtin.shell: |
+    rm -rf .config/user-dirs.dirs
+    xdg-user-dirs-update --force
+  become_user: "{{ USERNAME }}"
+  args:
+    chdir: "{{ lookup('env','HOME') }}"
+
+- name: Configuring user executable files
+  ansible.builtin.file:
+    path: "{{ [lookup('env','HOME'), item] | path_join }}"
+    mode: '0755'
+  loop: "{{ user_executable_files }}"
+
+- name: Install fonts packages
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    install_recommends: false
+  loop:
+    - "{{ fonts_packages }}"
+
+- name: Install and configuration fonts
+  become_user: "{{ USERNAME }}"
+  block:
+    - name: Install and configuration fonts | Create user fonts directory
+      ansible.builtin.file:
+        path: "{{ [lookup('env','HOME'), user_fonts_dir] | path_join }}"
+        state: directory
+        recurse: true
+        mode: '0755'
+
+    - name: Install and configuration fonts | Download Nerd Fonts
+      ansible.builtin.get_url:
+        url: "{{ [nerd_fonts_repo_url, item] | path_join +'.zip'}}"
+        dest: "{{ tmp_dir }}"
+        mode: '0755'
+      loop: "{{ nerd_fonts }}"
+
+    - name: Install and configuration fonts | Unarchive Nerd Fonts
+      ansible.builtin.unarchive:
+        src: "{{ [tmp_dir, item] | path_join +'.zip'}}"
+        dest: "{{ [lookup('env','HOME'), user_fonts_dir] | path_join }}"
+        remote_src: true
+      loop: "{{ nerd_fonts }}"
+
+    - name: Install and configuration fonts | Clone Source Code Pro Fonts
+      ansible.builtin.git:
+        repo: "{{ item.repo_url }}"
+        dest: "{{ [lookup('env','HOME'), user_fonts_dir, item.name] | path_join }}"
+        update: false
+      with_items:
+        - "{{ source_code_pro_fonts }}"
+
+- name: Configure thermal_zone for waybar
+  become_user: "{{ USERNAME }}"
+  block:
+    - name: Find all thermal_zone symlinks
+      ansible.builtin.find:
+        paths: /sys/class/thermal/
+        patterns: thermal_zone*
+        file_type: link
+      register: thermal_zones_links
+
+    - name: Find files with type of thermal_zone and filter for CPU
+      ansible.builtin.slurp:
+        src: "{{ item.path }}/type"
+      loop: "{{ thermal_zones_links.files }}"
+      register: thermal_zone_type_results
+
+    - name: Find the file containing a CPU type
+      ansible.builtin.set_fact:
+        cpu_thermal_file: >-
+          {{
+            (thermal_zone_type_results.results |
+            selectattr('content') |
+            selectattr('content', 'in', cpu_types_base64) |
+            map(attribute='source') |
+            first |
+            default(None))
+          }}
+      vars:
+        cpu_types_base64:
+          - "eDg2X3BrZ190ZW1wCg==" # x86_pkg_temp
+          - "Y29yZXRlbXAK"          # coretemp
+          - "Y3B1LXRoZXJtYWwK"      # cpu-thermal
+          - "VERpZQo="              # Tdie
+
+    - name: Fix thermal-zone in waybar config file
+      ansible.builtin.replace:
+        path: "{{ [lookup('env','HOME'), '.config/waybar/config'] | path_join }}"
+        regexp: '^\s*"hwmon-path":\s*"/sys/class/hwmon/hwmon\d+/temp1_input",'
+        replace: '      "hwmon-path": "/sys/class/hwmon/hwmon{{ cpu_thermal_file | ansible.builtin.dirname | ansible.builtin.basename |  regex_search("[0-9]+") }}/temp1_input",'
+      when:
+        - cpu_thermal_file is defined and cpu_thermal_file != None

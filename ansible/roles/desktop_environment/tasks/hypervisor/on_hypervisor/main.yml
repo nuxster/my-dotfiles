@@ -1,0 +1,7 @@
+---
+- name: Configure your installation on hypervisor
+  block:
+    - name: Configure your installation on hypervisor | Configure sway
+      ansible.builtin.include_tasks: configure_sway.yml
+  when:
+    - DESTINATION_DEVICE == 'vm'

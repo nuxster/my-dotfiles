@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=poweroff
+Comment=Power off
+Exec=sudo poweroff
+Icon=system-shutdown
+Type=Application

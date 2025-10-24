@@ -1,0 +1,28 @@
+---
+- name: Configure power management
+  become: true
+  block:
+    - name: Suspend and lock screen configuration
+      ansible.builtin.copy:
+        dest: "{{ login_manager_configuration_file }}"
+        content: |
+          HandlePowerKey=suspend
+          HandleSuspendKey=suspend
+          HandleLidSwitch=suspend
+          HandleLidSwitchExternalPower=suspend
+          HandleLidSwitchDocked=suspend
+          HandleRebootKeyLongPress=poweroff
+        owner: root
+        group: root
+        mode: '0644'
+      notify:
+        - Restart systemd logind unit
+
+    - name: Create shutdown, reboot and suspend user commands
+      ansible.builtin.copy:
+        src: "desktop_files/{{ item }}"
+        dest: "{{ [desktop_files_path, item] | path_join }}"
+        owner: root
+        group: root
+        mode: '0644'
+      loop: "{{ power_management_desktop_files }}"

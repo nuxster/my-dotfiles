@@ -1,0 +1,26 @@
+---
+- name: Install packages
+  become: true
+  block:
+    - name: Install Sway packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop:
+        - "{{ sway_packages }}"
+        - "{{ file_manager_packages }}"
+        - "{{ additional_packages }}"
+        - "{{ automount_utilites_packages }}"
+
+    - name: Install interface customisation packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop:
+        - "{{ interface_customisation_packages }}"
+
+    - name: Deleting downloaded packages that are no longer required
+      ansible.builtin.apt:
+        clean: true

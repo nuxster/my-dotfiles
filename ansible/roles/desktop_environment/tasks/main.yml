@@ -1,0 +1,28 @@
+---
+- name: Configure GUI and user environment
+  ansible.builtin.include_tasks:
+    file: gui/main.yml
+
+- name: Install and configure system utilities
+  ansible.builtin.include_tasks:
+    file: system/main.yml
+
+- name: Install and configure packages for telecommunications
+  ansible.builtin.include_tasks:
+    file: telecom/main.yml
+
+- name: Configure system security
+  ansible.builtin.include_tasks:
+    file: security/main.yml
+
+- name: Install and configure packages for multimedia
+  ansible.builtin.include_tasks:
+    file: multimedia/main.yml
+
+- name: Install and configure office packages
+  ansible.builtin.include_tasks:
+    file: office/main.yml
+
+- name: Configure system for hypervisor
+  ansible.builtin.include_tasks:
+    file: hypervisor/main.yml

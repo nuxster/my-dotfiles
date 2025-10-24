@@ -1,0 +1,171 @@
+---
+# General
+tmp_dir: /tmp
+
+# Packages
+sway_packages:
+  - greetd
+  - sway
+  - swayidle
+  - swaylock
+  - waybar
+  - wofi
+  - grim
+  - slurp
+  - wl-clipboard
+  - mako-notifier
+  - wlsunset
+  - wdisplays
+  - libglib2.0-bin
+  - wayland-protocols
+  - at-spi2-core
+  - wob
+  - kitty
+
+file_manager_packages:
+  - thunar
+  - thunar-volman
+  - thunar-archive-plugin
+  - tumbler
+  - gvfs-fuse
+  - gvfs-backends
+  - cifs-utils
+
+additional_packages:
+  - xdg-user-dirs
+  - xdg-desktop-portal
+  - xdg-desktop-portal-gtk
+  - zathura
+  - ristretto
+  - xarchiver
+  - bc
+  - trash-cli
+
+automount_utilites_packages:
+  - udisks2
+  - udiskie
+  - libblockdev-crypto3
+  - gir1.2-gtk-3.0
+  - gir1.2-gtk-4.0
+  - gir1.2-notify-0.7
+  - gir1.2-ayatanaappindicator3-0.1
+
+interface_customisation_packages:
+  - arc-theme
+  - papirus-icon-theme
+  - dmz-cursor-theme
+  - librsvg2-2
+  - librsvg2-common
+  - gtk-update-icon-cache
+
+network_manager_packages:
+  - network-manager-gnome
+  - network-manager-openvpn-gnome
+
+network_utilites_packages:
+  - remmina
+  - remmina-plugin-rdp
+  - remmina-plugin-vnc
+  - remmina-plugin-x2go
+  - firefox-esr
+  - thunderbird
+
+wifi_support_packages:
+  - wpasupplicant
+
+bluetooth_support_packages:
+  - bluetooth
+  - rfkill
+  - blueman
+  - bluez
+  - bluez-tools
+
+# PipeWire
+sound_system_packages:
+  - rtkit
+  - wireplumber
+  - pipewire
+  - pipewire-bin
+  - pipewire-alsa
+  - pipewire-pulse
+  - pipewire-audio
+  - pipewire-libcamera
+  - libcamera-ipa
+  - libspa-0.2-modules
+  - libspa-0.2-bluetooth
+  - xdg-desktop-portal-wlr
+  - pamixer
+  - pavucontrol
+
+multimedia_packages:
+  - mpv
+  - cmus
+
+spelling_packages:
+  - aspell-en
+  - aspell-ru
+  - hunspell-en-us
+  - hunspell-ru
+
+office_packages:
+  - libreoffice-gtk3
+  - libreoffice-calc
+  - libreoffice-writer
+  - libreoffice-style-colibre
+
+security_packages:
+  - sudo
+  - gnome-keyring
+  - gnome-keyring-pkcs11
+
+system_utilites_packages:
+  - psensor
+  - gnome-disk-utility
+  - gnome-system-monitor
+
+fonts_packages:
+  - fonts-cantarell
+  - fonts-dejavu
+  - fonts-dejavu-core
+  - fonts-dejavu-extra
+  - fonts-firacode
+  - fonts-font-awesome
+  - fonts-freefont-otf
+  - fonts-freefont-ttf
+  - fonts-inconsolata
+  - fonts-liberation
+  - fonts-liberation2
+  - fonts-noto
+  - fonts-noto-core
+  - fonts-opensymbol
+  - fonts-powerline
+  - fonts-roboto
+  - fonts-roboto-unhinted
+  - fonts-symbola
+
+# Hypervisor
+
+### Packages
+libvirt_packages:
+  - libvirt-clients
+  - libvirt-daemon-system
+  - libvirt-daemon
+  - qemu-kvm
+  - qemu-utils
+  - virtinst
+  - virt-manager
+  - bridge-utils
+  - dnsmasq
+  - gir1.2-spiceclientgtk-3.0
+  - ovmf
+
+### User groups
+libvirt_user_groups:
+  - libvirt
+  - libvirt-qemu
+
+# GUI
+
+### Sway parameters
+sway_parameters_for_libvirt:
+  - WLR_NO_HARDWARE_CURSORS=1

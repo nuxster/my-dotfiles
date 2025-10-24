@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  gather_facts: no
+  roles:
+    - common
+    - desktop_environment

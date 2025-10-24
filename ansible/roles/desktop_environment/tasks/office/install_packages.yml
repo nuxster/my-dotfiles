@@ -1,0 +1,23 @@
+---
+- name: Install packages
+  become: true
+  block:
+    - name: Install spelling support packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop:
+        - "{{ spelling_packages }}"
+
+    - name: Install Libre Office packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop:
+        - "{{ office_packages }}"
+
+    - name: Deleting downloaded packages that are no longer required
+      ansible.builtin.apt:
+        clean: true

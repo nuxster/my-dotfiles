@@ -1,0 +1,114 @@
+---
+# General
+tmp_dir: /tmp
+
+### Plymouth
+plymouth_default_theme: debian-slider
+plymouth_themes:
+  debian-slider: https://gitlab.com/nuxster/debian-slider.git
+plymouth_packages:
+  - plymouth
+  - plymouth-themes
+
+# Users
+user_groups:
+  - users
+  - netdev
+  - plugdev
+  - dialout
+  - video
+  - audio
+  - sudo
+  - games
+
+ssh_configuration_files:
+  - config_ssh
+  - config
+  - environment
+
+ssh_config_ssh_parameters:
+  - 'IdentitiesOnly=yes' 
+  - 'RemoteCommand TERM=xterm $SHELL'
+  - 'RequestTTY yes'
+
+# Packages
+
+### Kernel & kernel headers
+kernel_headers_packages:
+  - linux-headers-amd64
+  - build-essential
+  - dkms
+
+### Drivers
+amd_microcode: amd64-microcode
+intel_microcode: intel-microcode
+microcode_packages: "{{ intel_microcode if CPU == 'intel' else amd_microcode }}"
+firmware_packages:
+  - firmware-linux
+  - firmware-linux-free
+  - firmware-linux-nonfree
+  - firmware-misc-nonfree
+  - firmware-iwlwifi
+
+### Additional software
+archivators_packages: 
+  - zip
+  - unzip
+  - unrar
+  - p7zip-full
+
+filesystems_utils_packages:
+  - exfatprogs
+  - dosfstools
+  - ntfs-3g
+  - sshfs
+
+vim_packages:
+  - vim-tiny
+  - vim-common
+
+neovim_package:
+  - neovim
+
+certificates_gpg_packages:
+  - ca-certificates
+  - openssl
+  - gnupg2
+
+tui_packages:
+  - pass
+  - apg
+  - cmus
+  - grc
+  - duf
+  - bpytop
+  - lsd
+  - ranger
+  - file
+  - htop
+
+networking_packages:
+  - wget
+  - curl
+  - lynx
+  - nmap
+  - tcpdump
+  - rsync
+  - netcat-openbsd
+
+util_packages:
+  - util-linux-extra
+
+shell_package:
+  - "{{ SHELL | default('fish')}}"
+
+shell_configuration_files: .config/fish
+
+# Laptop
+for_laptop_packages:
+  - brightnessctl
+  - brightness-udev
+  - pm-utils
+  - tlp
+
+tlp_config_file: 01-mytlp.conf

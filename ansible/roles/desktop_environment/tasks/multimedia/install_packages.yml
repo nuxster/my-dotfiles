@@ -1,0 +1,25 @@
+---
+- name: Install packages
+  become: true
+  block:
+    - name: Install packages for sound system support
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop:
+        - "{{ sound_system_packages }}"
+      notify:
+        - Enable rtkit systemd unit
+
+    - name: Install multimedia packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop:
+        - "{{ multimedia_packages }}"
+
+    - name: Deleting downloaded packages that are no longer required
+      ansible.builtin.apt:
+        clean: true

@@ -1,0 +1,15 @@
+---
+- name: Install packages
+  become: true
+  block:
+    - name: Install system security support packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop:
+        - "{{ security_packages }}"
+
+    - name: Deleting downloaded packages that are no longer required
+      ansible.builtin.apt:
+        clean: true

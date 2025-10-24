@@ -1,0 +1,44 @@
+---
+- name: Configure system for SSD storage
+  become: true
+  block:
+    - name: Enable fstrim
+      ansible.builtin.systemd_service:
+        name: fstrim.timer
+        state: started
+        enabled: true
+
+    - name: Configure scheduler for SSD
+      ansible.builtin.lineinfile:
+        path: /etc/sysfs.conf
+        line: "block/{{ item }}/queue/scheduler = deadline"
+        owner: root
+        group: root
+        mode: '0644'
+        create: true
+      loop: "{{ SSD_DEVICES }}"
+
+    - name: Set scheduler for SSD
+      ansible.builtin.command: echo "deadline" > /sys/block/{{ item }}/queue/scheduler
+      loop: "{{ SSD_DEVICES }}"
+
+    - name: Check if lvm settings exist
+      ansible.builtin.stat:
+        path: /etc/lvm/lvm.conf
+      register: lvm_conf
+
+    - name: Configure discard for LVM
+      ansible.builtin.lineinfile:
+        path: /etc/lvm/lvm.conf
+        regexp: '^# issue_discards = 0'
+        line: 'issue_discards = 1'
+      when: lvm_conf.stat.islnk is defined
+
+    - name: Set sysctl parameters for SSD
+      ansible.posix.sysctl:
+        name: "{{ item.key }}"
+        value: "{{ item.value }}"
+        sysctl_set: true
+        state: present
+        reload: true
+      loop: "{{ lookup('ansible.builtin.dict', ssd_sysctl) }}"

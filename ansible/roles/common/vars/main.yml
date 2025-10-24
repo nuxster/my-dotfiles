@@ -1,0 +1,22 @@
+---
+# General
+
+### GRUB
+grub_cmdline_linux_default: "{{ 'quiet splash acpi_backlight=native' if DESTINATION_DEVICE == 'laptop' else 'quiet splash' }}"
+grub_default_config: /etc/default/grub
+
+# Sysctl
+
+### SDD
+ssd_sysctl:
+  vm.vfs_cache_pressure: 50
+  vm.swappiness: 10
+
+# APT
+apt_config_file: /etc/apt/apt.conf
+
+### APT Options
+apt_options:
+  - 'APT::Install-Recommends "false";'
+  - 'APT::Install-Suggests "false";'
+  - 'APT::Default-Release "/^stable(|-security|-updates)$/";'

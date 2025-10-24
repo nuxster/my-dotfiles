@@ -1,0 +1,9 @@
+---
+- name: Configure users and groups
+  become: true
+  block:
+    - name: Add user to pipewire group
+      ansible.builtin.user:
+        name: "{{ USERNAME }}"
+        groups: pipewire
+        append: true

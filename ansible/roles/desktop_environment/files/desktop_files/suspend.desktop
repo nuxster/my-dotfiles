@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=suspend
+Comment=Suspend system
+Exec=systemctl suspend
+Icon=system-suspend
+Type=Application

@@ -1,0 +1,17 @@
+[Unit]
+Description=Network Manager Applet.
+BindsTo=sway-session.target
+
+[Service]
+Type=simple
+StandardError=journal
+EnvironmentFile={{ env_file }}
+ExecStart=/usr/bin/nm-applet --indicator
+ExecReload=kill -SIGUSR2 $MAINPID
+ExecStop=/bin/kill -2 $MAINPID
+Restart=always
+RestartSec=1
+TimeoutStopSec=10
+
+[Install]
+WantedBy=sway-session.target

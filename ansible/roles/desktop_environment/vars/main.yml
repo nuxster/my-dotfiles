@@ -1,0 +1,51 @@
+---
+# General
+desktop_files_path: /usr/share/applications
+
+### Power management
+login_manager_configuration_file: /etc/systemd/logind.conf
+login_manager_systemd_unit: systemd-logind
+
+power_management_desktop_files:
+  - poweroff.desktop
+  - reboot.desktop
+  - suspend.desktop
+
+### Systemd
+systemd_dir: /etc/systemd/system
+user_systemd_dir: .config/systemd/user
+
+### Sway
+user_executable_files:
+  - .config/waybar/bin/galendae
+  - .config/sway/scripts/run.sh
+
+user_environment_file: .config/sway/env
+
+all_dotfiles:
+  - .config
+  - .ssh
+
+user_sway_session_target: sway-session.target
+user_systemd_units:
+  - waybar.service
+  - mako.service
+  - ssh-agent.service
+  - udiskie.service
+  - blueman-applet.service
+  - nm-applet.service
+
+### Fonts
+user_fonts_dir: .fonts
+
+nerd_fonts_version: v3.3.0
+nerd_fonts_repo_url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts_version }}/"
+nerd_fonts:
+  - Iosevka
+  - Terminus
+  - JetBrainsMono
+  - Hack
+
+source_code_pro_fonts:
+  - name: source-code-pro
+    repo_url: https://github.com/adobe-fonts/source-code-pro.git

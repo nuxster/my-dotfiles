@@ -1,0 +1,32 @@
+PATH=/home/nuxster/bin:/usr/bin
+TERM=
+
+XDG_CURRENT_DESKTOP=sway
+XDG_SESSION_DESKTOP=sway
+XDG_SESSION_TYPE=wayland
+XDG_RUNTIME_DIR=/run/user/1000
+XDG_DATA_HOME=/home/nuxster/.local/share
+XDG_CONFIG_HOME=/home/nuxster/.config
+
+GDK_BACKEND=wayland
+GTK_USE_PORTAL=1
+
+# Disable client-side Qt decorations
+QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+# Requires that qt6ct package is installed
+#QT_QPA_PLATFORMTHEME=qt6ct
+QT_QPA_PLATFORM=wayland
+
+KITTY_ENABLE_WAYLAND=1
+MOZ_ENABLE_WAYLAND=1
+MOZ_USE_XINPUT2=1
+
+SDL_VIDEODRIVER=wayland
+
+# Required for IntelliJ
+_JAVA_AWT_WM_NONREPARENTING=1
+
+# For Waybar
+LC_TIME=en_US.UTF-8
+# For qalc
+LC_NUMERIC=en_US.UTF-8

@@ -1,0 +1,9 @@
+---
+- name: Configure groups and users for hypervisor
+  become: true
+  block:
+    - name: Append user to hypervisor groups
+      ansible.builtin.user:
+        name: "{{ USERNAME }}"
+        groups: "{{ libvirt_user_groups }}"
+        append: true

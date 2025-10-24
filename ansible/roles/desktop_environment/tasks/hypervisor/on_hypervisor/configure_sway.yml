@@ -1,0 +1,7 @@
+---
+- name: Set sway parameters for normal operation in the hypervisor
+  ansible.builtin.lineinfile:
+    path: "{{ [lookup('env','HOME'), user_environment_file] | path_join }}"
+    state: present
+    line: "{{ item }}"
+  loop: "{{ sway_parameters_for_libvirt }}"

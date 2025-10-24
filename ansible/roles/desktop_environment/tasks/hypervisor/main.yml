@@ -1,0 +1,8 @@
+---
+- name: Install and configure hypervisor
+  ansible.builtin.include_tasks:
+    file: for_hypervisor/main.yml
+
+- name: Configure your installation on hypervisor
+  ansible.builtin.include_tasks:
+    file: on_hypervisor/main.yml

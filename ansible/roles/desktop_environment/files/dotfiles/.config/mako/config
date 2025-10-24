@@ -1,0 +1,9 @@
+font=Iosevka Nerd Font 11
+background-color=#000000
+text-color=#FFFFFF
+border-color=#535d6c
+default-timeout=5000
+icons=0
+
+[urgency=high]
+text-color=#CB4B16

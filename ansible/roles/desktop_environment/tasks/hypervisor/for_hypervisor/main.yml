@@ -1,0 +1,11 @@
+---
+- name: Install and configure hypervisor
+  block:
+    - name: Install and configure hypervisor | Install packages
+      ansible.builtin.include_tasks:
+        file: install_packages.yml
+
+    - name: Install and configure hypervisor | Configure groups and users
+      ansible.builtin.include_tasks:
+        file: configure_groups_and_users.yml
+  when: HYPERVISOR

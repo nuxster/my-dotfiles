@@ -1,0 +1,15 @@
+---
+- name: Restart systemd logind unit
+  become: true
+  ansible.builtin.systemd_service:
+    name: "{{ login_manager_systemd_unit }}"
+    state: restarted
+    daemon_reload: true
+
+- name: Enable rtkit systemd unit
+  become: true
+  ansible.builtin.systemd_service:
+    name: rtkit-daemon
+    force: true
+    enabled: true
+    daemon_reload: true

@@ -1,0 +1,8 @@
+---
+- name: Install packages
+  ansible.builtin.include_tasks:
+    file: install_packages.yml
+
+- name: Configure power management
+  ansible.builtin.include_tasks:
+    file: configure_power_management.yml
