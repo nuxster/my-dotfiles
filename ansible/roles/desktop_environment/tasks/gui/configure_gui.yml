@@ -33,6 +33,7 @@
     mode: '0644'
   vars:
     user_home_dir: "{{ lookup('env','HOME') }}"
+    uid: "{{ user_info.ansible_facts.getent_passwd[USERNAME][2] }}"
 
 - name: Create user systemd units
   block:
@@ -67,7 +68,7 @@
       loop: "{{ user_systemd_units }}"
       become_user: "{{ USERNAME }}"
       environment:
-        XDG_RUNTIME_DIR: "/run/user/{{ ansible_facts.getent_passwd[USERNAME].1 }}"
+        XDG_RUNTIME_DIR: "/run/user/{{ user_info.ansible_facts.getent_passwd[USERNAME][2]  }}"
 
 - name: Create user sway session target
   ansible.builtin.template:
@@ -77,13 +78,17 @@
     group: "{{ USERNAME }}"
     mode: '0644'
 
-- name: Create user directories
-  ansible.builtin.shell: |
-    rm -rf .config/user-dirs.dirs
-    xdg-user-dirs-update --force
+- name: Remove custom XDG user dirs file if present
+  ansible.builtin.file:
+    path: "{{ [lookup('env','HOME'), '.config', 'user-dirs.dirs'] | path_join }}"
+    state: absent
   become_user: "{{ USERNAME }}"
-  args:
-    chdir: "{{ lookup('env','HOME') }}"
+
+- name: Create user directories
+  ansible.builtin.command: xdg-user-dirs-update --force
+  become_user: "{{ USERNAME }}"
+  environment:
+    HOME: "{{ lookup('env','HOME') }}"
 
 - name: Configuring user executable files
   ansible.builtin.file:

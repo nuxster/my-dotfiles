@@ -14,6 +14,7 @@
         repo: "{{ item.value }}" 
         dest: "{{ [tmp_dir, item.key] | path_join }}"
         update: false
+        force: false
       loop: "{{ lookup('ansible.builtin.dict', plymouth_themes, wantlist=true) }}"
 
     - name: Make plymouth theme

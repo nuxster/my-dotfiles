@@ -9,8 +9,12 @@ sudo apt install --no-install-recommends -y \
 
 pip3 install --upgrade pip
 python3 -m venv .venv
+  
+if [[ ! -d .venv/bin ]]; then
+  echo "virtualenv missing (.venv/bin not found)" >&2
+  exit 1
+fi
+
 source .venv/bin/activate
-
 pip install -r ./ansible/requirements.txt
-
 ansible-playbook -i ./ansible/inventory ./ansible/site.yml --ask-become-pass

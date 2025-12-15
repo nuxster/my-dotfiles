@@ -1,0 +1,6 @@
+---
+- name: Get information about regular user
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ USERNAME }}"
+  register: user_info

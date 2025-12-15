@@ -1,4 +1,8 @@
 ---
+- name: Run prepare tasks
+  ansible.builtin.include_tasks:
+    file: prepare/main.yml
+
 - name: Configure GUI and user environment
   ansible.builtin.include_tasks:
     file: gui/main.yml

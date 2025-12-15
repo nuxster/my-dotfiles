@@ -11,6 +11,8 @@ grub_default_config: /etc/default/grub
 ssd_sysctl:
   vm.vfs_cache_pressure: 50
   vm.swappiness: 10
+  vm.dirty_ratio: 10
+  vm.dirty_background_ratio: 5
 
 # APT
 apt_config_file: /etc/apt/apt.conf

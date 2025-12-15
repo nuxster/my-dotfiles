@@ -1,4 +1,11 @@
 ---
+- name: Create users config directory
+  ansible.builtin.file:
+    path: "{{ [lookup('env','HOME'), '.config'] | path_join }}"
+    state: directory
+    owner: "{{ USERNAME }}"
+    group: "{{ USERNAME }}"
+
 - name: Copy shell configuration files
   ansible.builtin.copy:
     src: "{{ shell_configuration_files }}"
@@ -31,7 +38,7 @@
         state: directory
         owner: "{{ USERNAME }}"
         group: "{{ USERNAME }}"
-        mode: '0755'
+        mode: '0700'
 
     - name: Regular user configure ssh | Create user ssh configuration files
       ansible.builtin.file:
