@@ -16,4 +16,5 @@
         state: present
         reload: true
       loop: "{{ lookup('ansible.builtin.dict', ssd_sysctl) }}"
-  when: (SSD_DEVICES is defined) and (SSD_DEVICES | length > 0)
+  when:
+    - ssd_devices

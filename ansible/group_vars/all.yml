@@ -14,12 +14,8 @@ SHELL: fish
 # User's timezone
 TIMEZONE: Europe/Moscow
 
-# List of SSD devices or undefined
-SSD_DEVICES:
-  # e.g. for desktop or laptop
-  - nvme0n1
-  # e.g. for virtual machine
-  #- vda
+# Is there an SSD device in the system
+SSD_DEVICES: true
 
 # Install Libre Office packages
 OFFICE: false
