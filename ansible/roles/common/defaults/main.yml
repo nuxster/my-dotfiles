@@ -5,7 +5,7 @@ tmp_dir: /tmp
 ### Plymouth
 plymouth_default_theme: debian-slider
 plymouth_themes:
-  debian-slider: https://gitlab.com/nuxster/debian-slider.git
+  debian-slider: https://github.com/nuxster/debian-slider.git
 plymouth_packages:
   - plymouth
   - plymouth-themes
