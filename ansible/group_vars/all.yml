@@ -35,3 +35,6 @@ UPGRADE_PACKAGES: true
 
 # Install ntp daemon (ntpd/chrony) packages
 NTP_DAEMON: true
+
+# Configure networking
+RECONFIGURE_NETWORK: true

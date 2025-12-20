@@ -112,3 +112,6 @@ for_laptop_packages:
   - tlp
 
 tlp_config_file: 01-mytlp.conf
+
+# Networking
+rewrite_interfaces: "{{ RECONFIGURE_NETWORK | default(false) | bool }}"
