@@ -9,6 +9,14 @@
         create: true
       loop: "{{ apt_options }}"
 
+    - name: Set APT mirror
+      ansible.builtin.template:
+        src: sources_list.tmpl
+        dest: /etc/apt/sources.list
+        owner: root
+        group: root
+        mode: '0644'
+
     - name: Upgrade all packages
       ansible.builtin.apt:
         upgrade: dist

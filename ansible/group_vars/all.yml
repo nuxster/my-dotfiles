@@ -50,3 +50,6 @@ DISPLAYS_PARAMETERS:
     height: 2160
     rate: 60
     scale: 2
+
+# APT sourve mirror
+APT_SOURCE_MIRROR_URL: mirror.yandex.ru

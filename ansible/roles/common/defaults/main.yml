@@ -31,6 +31,11 @@ ssh_config_ssh_parameters:
   - 'RemoteCommand TERM=xterm $SHELL'
   - 'RequestTTY yes'
 
+# APT
+
+### Mirrors
+apt_source_mirror_url: "{{ APT_SOURCE_MIRROR_URL | default('deb.debian.org') }}"
+
 # Packages
 
 ### Kernel & kernel headers
