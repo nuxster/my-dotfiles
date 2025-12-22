@@ -7,6 +7,22 @@
     group: "{{ USERNAME }}"
   loop: "{{ all_dotfiles }}"
 
+- name: Configure Waybar
+  ansible.builtin.template:
+    src: waybar_config.tmpl
+    dest: "{{ [lookup('env','HOME'), '.config', 'waybar', 'config'] | path_join }}"
+    owner: "{{ USERNAME }}"
+    group: "{{ USERNAME }}"
+    mode: '0664'
+
+- name: Configure Sway outputs
+  ansible.builtin.template:
+    src: sway_output_config.tmpl
+    dest: "{{ [lookup('env','HOME'), '.config', 'sway', 'config.d', 'output.conf'] | path_join }}"
+    owner: "{{ USERNAME }}"
+    group: "{{ USERNAME }}"
+    mode: '0664'
+
 - name: Configure greetd
   become: true
   ansible.builtin.blockinfile:
@@ -136,45 +152,3 @@
         update: false
       with_items:
         - "{{ source_code_pro_fonts }}"
-
-- name: Configure thermal_zone for waybar
-  become_user: "{{ USERNAME }}"
-  block:
-    - name: Find all thermal_zone symlinks
-      ansible.builtin.find:
-        paths: /sys/class/thermal/
-        patterns: thermal_zone*
-        file_type: link
-      register: thermal_zones_links
-
-    - name: Find files with type of thermal_zone and filter for CPU
-      ansible.builtin.slurp:
-        src: "{{ item.path }}/type"
-      loop: "{{ thermal_zones_links.files }}"
-      register: thermal_zone_type_results
-
-    - name: Find the file containing a CPU type
-      ansible.builtin.set_fact:
-        cpu_thermal_file: >-
-          {{
-            (thermal_zone_type_results.results |
-            selectattr('content') |
-            selectattr('content', 'in', cpu_types_base64) |
-            map(attribute='source') |
-            first |
-            default(None))
-          }}
-      vars:
-        cpu_types_base64:
-          - "eDg2X3BrZ190ZW1wCg==" # x86_pkg_temp
-          - "Y29yZXRlbXAK"          # coretemp
-          - "Y3B1LXRoZXJtYWwK"      # cpu-thermal
-          - "VERpZQo="              # Tdie
-
-    - name: Fix thermal-zone in waybar config file
-      ansible.builtin.replace:
-        path: "{{ [lookup('env','HOME'), '.config/waybar/config'] | path_join }}"
-        regexp: '^\s*"hwmon-path":\s*"/sys/class/hwmon/hwmon\d+/temp1_input",'
-        replace: '      "hwmon-path": "/sys/class/hwmon/hwmon{{ cpu_thermal_file | ansible.builtin.dirname | ansible.builtin.basename |  regex_search("[0-9]+") }}/temp1_input",'
-      when:
-        - cpu_thermal_file is defined and cpu_thermal_file != None

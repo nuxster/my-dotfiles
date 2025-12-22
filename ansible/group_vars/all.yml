@@ -34,3 +34,19 @@ NTP_DAEMON: true
 
 # Configure networking
 RECONFIGURE_NETWORK: true
+
+# Path to thermal zone
+PATH_TO_THERMAL_ZONE: /sys/class/hwmon/hwmon2/temp1_input
+
+# Configure displays
+DISPLAYS_PARAMETERS:
+  - name: eDP-1
+    width: 3840
+    height: 2160
+    rate: 60
+    scale: 2
+  - name: HDMI-A-1
+    width: 3840
+    height: 2160
+    rate: 60
+    scale: 2

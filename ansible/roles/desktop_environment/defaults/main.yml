@@ -169,3 +169,15 @@ libvirt_user_groups:
 ### Sway parameters
 sway_parameters_for_libvirt:
   - WLR_NO_HARDWARE_CURSORS=1
+
+### Path to thermal zone (x86_pkg_temp, coretemp, cpu-thermal, Tdie)
+path_to_thermal_zone: "{{ PATH_TO_THERMAL_ZONE | default('') }}"
+
+### Parameters of displays (eDP-1, HDMI-A-1, DP-1)
+displays_parameters_default:
+  - name: eDP-1
+    width: 3840
+    height: 2160
+    rate: 60
+    scale: 2
+displays_parameters: "{{ DISPLAYS_PARAMETERS | default(displays_parameters_default) }}"

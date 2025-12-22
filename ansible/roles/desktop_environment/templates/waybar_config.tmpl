@@ -1,0 +1,150 @@
+// vim: ft=json fdm=manual
+
+{
+    "output": {{ displays_parameters | map(attribute='name') | list | to_json }},
+    "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    "height": 25, // Waybar height (to be removed for auto height)
+    "spacing": 5, // Gaps between modules (5px)
+    // Choose the order of the modules
+    "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad"],
+    "modules-center": [
+      "clock#calendar",
+      "clock",
+      "idle_inhibitor"
+    ],
+    "modules-right": [
+      "tray",
+      "battery",
+      "sway/language",
+      "wireplumber#output",
+      "cpu",
+      "memory",
+      "temperature",
+      "disk",
+      "custom/power"
+    ],
+    // Modules configuration
+    "sway/workspaces": {
+      "disable-scroll": false,
+      "all-outputs": true,
+        "format": "{name}: {icon}",
+        "format-icons": {
+        "1": " ",
+	    "2": " ",
+        "3": "🌐",
+        "4": " ",
+        "5": " ", 
+	    "6": " ",
+        "7": " ",
+        "8": " ",
+        "9": " ",
+        "10": " ",
+        "default": " "
+      }
+    },
+    "sway/scratchpad": {
+      "format": "{icon} {count}",
+      "show-empty": false,
+      "format-icons": ["  ", " "],
+      "tooltip": true,
+      "tooltip-format": "{app}: {title}"
+    },
+    "idle_inhibitor": {
+      "format": "{icon}",
+      "format-icons": {
+        "activated": "",
+        "deactivated": ""
+      }
+    },
+    "wireplumber#output": {
+      "format": "{icon} {volume}%",
+	    "format-muted": " {volume}%",
+      "format-bluetooth": " {icon} {volume}%",
+      "format-bluetooth-muted": "  {volume}%",
+      "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+      "on-click-right": "pavucontrol -t 3",
+      "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+",
+      "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-",
+      "format-icons": {
+        "headphone": "",
+        "default": ["", "", ""]
+	    }
+    },
+    "cpu": {
+      "interval": 10,
+      "format": " {usage}%",
+      "on-click": "gnome-system-monitor -p"
+    },
+    "memory": {
+      "interval": 10,
+      "format": " {percentage}%",
+      "on-click": "gnome-system-monitor -r"
+    },
+    {% if path_to_thermal_zone is defined and path_to_thermal_zone %}
+    "temperature": {
+      "interval": 5,
+      "hwmon-path": "{{ path_to_thermal_zone }}",
+      "critical-threshold": 80,
+      "format": " {temperatureC}°C",
+    },
+    {% else %}
+    //"temperature": {
+    //  "interval": 5,
+    //  "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+    //  "critical-threshold": 80,
+    //  "format": " {temperatureC}°C",
+    //},
+    {% endif %}
+    "disk": {
+      "interval": 30,
+      "format": " {percentage_free}%",
+      "on-click": "gnome-system-monitor -f",
+	    "on-click-right": "gnome-disks"
+    },
+    "sway/language": {
+      "format": "  {}",
+      "min-length": 5,
+      "on-click": "swaymsg input '1:1:AT_Translated_Set_2_keyboard' xkb_switch_layout next",
+    },
+    "battery": {
+      "states": {
+        "warning": 30,
+        "critical": 15
+      },
+      "format": "{icon} ",
+      "format-charging": " {capacity}%",
+      "format-alt": "{icon}  {capacity}%",
+      "format-icons": ["", "", "", "", ""]
+    },
+    "clock#calendar": {
+      "timezone": "Europe/Moscow",
+      "format": "{:%b %d}",
+      "tooltip": true,
+      "tooltip-format": "{:%d %B %Y}",
+      "on-click": "$HOME/.config/waybar/bin/galendae -c $HOME/.config/galendae/dark.conf"
+    },
+    "clock": {
+      "interval": 1,
+      "timezone": "Europe/Moscow",
+      "tooltip": false,
+      "format": "{:%H:%M}",
+      "format-alt": "{:%H:%M:%S}"
+    },
+    "tray": {
+      "spacing": 10
+    },
+   // power button
+  "custom/power": {
+    "format": "⏻  ",
+    "tooltip": false,
+    "menu": "on-click",
+    "menu-file": "~/.config/waybar/power_menu.xml",
+    "menu-actions": {
+      "shutdown": "systemctl poweroff",
+      "reboot": "systemctl reboot",
+      "suspend": "systemctl suspend",
+      "hibernate": "systemctl hibernate"
+    }
+  }
+}
