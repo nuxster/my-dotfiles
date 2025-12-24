@@ -22,6 +22,5 @@
       ansible.builtin.shell: 
         cmd: |
           cd {{ [tmp_dir, item.key] | path_join }}
-          make install
           make apply-now
       loop: "{{ lookup('ansible.builtin.dict', plymouth_themes, wantlist=true) }}"
