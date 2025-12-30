@@ -1,0 +1,102 @@
+---
+- name: Configure user autologin
+  become: true
+  ansible.builtin.lineinfile:
+    path: "{{ gnome_autologin_configuration_file }}"
+    regexp: "^(.*){{ item.key }}"
+    line: "{{ item.value }}"
+  loop: "{{ lookup('ansible.builtin.dict', gnome_autologin_options) }}"
+
+- name: Set the default terminal emulator
+  become: true
+  block:
+    - name: Set the default terminal emulator | Find the executable file of the default text editor
+      ansible.builtin.find:
+        paths:
+          - /usr/bin
+          - /usr/local/bin
+        file_type: file
+        patterns: "{{ default_terminal_emulator }}"
+        recurse: false
+      register: path_to_default_terminal_emulator
+
+    - name: Set the default terminal emulator | Set the default terminal emulator alternatives
+      community.general.alternatives:
+        name: x-terminal-emulator
+        path: "{{ path_to_default_terminal_emulator.files[0].path }}"
+        priority: 20
+
+- name: Copy user dotfiles
+  ansible.builtin.copy:
+    src: "dotfiles/{{ item }}"
+    dest: "{{ lookup('env','HOME') }}"
+    owner: "{{ USERNAME }}"
+    group: "{{ USERNAME }}"
+  loop: "{{ user_dotfiles }}"
+
+- name: Gnome post install configuration
+  become_user: "{{ USERNAME }}"
+  vars:
+    post_install_desktop_file: "{{ [lookup('env','HOME'), gnome_post_install_desktop_file] | path_join }}"
+    post_install_script: "{{ [lookup('env','HOME'), gnome_post_install_configure_script] | path_join }}"
+    wallpaper: "{{ [lookup('env','HOME'), gnome_wallpaper] | path_join }}"
+  block:
+    - name: Gnome post install configuration | Create Gnome wallpapers directory
+      ansible.builtin.file:
+        path: "{{ [lookup('env','HOME'), gnome_wallpaper_directory] | path_join }}" 
+        state: directory
+        mode: '0755'
+
+    - name: Gnome post install configuration | Copy Gnome wallpaper
+      ansible.builtin.copy:
+        src: "{{ gnome_wallpaper }}"
+        dest: "{{ wallpaper }}"
+        owner: "{{ USERNAME }}"
+        group: "{{ USERNAME }}"
+        mode: '0644'
+
+    - name: Gnome post install configuration | Create Gnome autostart directory
+      ansible.builtin.file:
+        path: "{{ [lookup('env','HOME'), gnome_autostart_directory] | path_join }}" 
+        state: directory
+        mode: '0755'
+
+    - name: Gnome post install configuration | Create *.desktop file
+      ansible.builtin.template:
+        force: true
+        src: "{{ gnome_post_install_desktop_file_template }}"
+        dest: "{{ post_install_desktop_file }}" 
+        owner: "{{ USERNAME }}"
+        group: "{{ USERNAME }}"
+        mode: '0644'
+
+    - name: Gnome post install configuration | Create post install script
+      ansible.builtin.template:
+        force: true
+        src: "{{ gnome_post_install_configure_script_template }}"
+        dest: "{{ post_install_script }}" 
+        owner: "{{ USERNAME }}"
+        group: "{{ USERNAME }}"
+        mode: '0755'
+
+- name: Set user avatar
+  become: true
+  vars:
+    user_avatar: "{{ ['/', user_avatar_file] | path_join }}"
+  block:
+    - name: Set user avatar | Create user avatar config file
+      ansible.builtin.template:
+        force: true
+        src: "{{ user_avatar_config_file_template }}"
+        dest: "{{ user_avatar_config_file }}" 
+        owner: root
+        group: root
+        mode: '0600'
+
+    - name: Set user avatar | Copy user avatar
+      ansible.builtin.copy:
+        src: "{{ user_avatar_file }}"
+        dest: "{{ user_avatar }}"
+        owner: root
+        group: root
+        mode: '0644'

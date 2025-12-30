@@ -1,0 +1,56 @@
+---
+- name: Create users config directory
+  ansible.builtin.file:
+    path: "{{ [lookup('env','HOME'), '.config'] | path_join }}"
+    state: directory
+    owner: "{{ USERNAME }}"
+    group: "{{ USERNAME }}"
+
+- name: Copy shell configuration files
+  ansible.builtin.copy:
+    src: "{{ shell_configuration_files }}"
+    dest: "{{ [lookup('env','HOME'), '.config'] | path_join }}"
+    owner: "{{ USERNAME }}"
+    group: "{{ USERNAME }}"
+
+- name: Add user to groups and set shell
+  become: true
+  ansible.builtin.user:
+    name: "{{ USERNAME }}"
+    shell: "/usr/bin/{{ SHELL }}"
+    groups: "{{ user_groups }}"
+    append: true
+
+- name: Configure sudoers
+  become: true
+  community.general.sudoers:
+    name: "{{ USERNAME }}"
+    state: present
+    user: "{{ USERNAME }}"
+    runas: ALL
+    commands: ALL
+
+- name: Regular user configure ssh
+  block:
+    - name: Regular user configure ssh | Create ~/.ssh
+      ansible.builtin.file:
+        path: "{{ [lookup('env','HOME'), '.ssh'] | path_join }}"
+        state: directory
+        owner: "{{ USERNAME }}"
+        group: "{{ USERNAME }}"
+        mode: '0700'
+
+    - name: Regular user configure ssh | Create user ssh configuration files
+      ansible.builtin.file:
+        path: "{{ [lookup('env','HOME'), '.ssh', item] | path_join }}"
+        state: touch
+        owner: "{{ USERNAME }}"
+        group: "{{ USERNAME }}"
+        mode: '0600'
+      loop: "{{ ssh_configuration_files }}"
+    
+    - name: Regular user configure ssh | Configure user config_ssh
+      ansible.builtin.lineinfile:
+        path: "{{ [lookup('env','HOME'), '.ssh', 'config_ssh'] | path_join }}"
+        line: "{{ item }}"
+      loop: "{{ ssh_config_ssh_parameters }}"

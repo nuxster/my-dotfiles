@@ -1,0 +1,147 @@
+---
+# General
+tmp_dir: /tmp
+
+# Fonts
+
+### Custom fonts
+
+#### Nerd Fonts
+nerd_fonts_version: v3.4.0
+nerd_fonts_repo_url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts_version }}/"
+nerd_fonts:
+  - Iosevka
+  - Terminus
+  - JetBrainsMono
+  - Hack
+
+#### Source Code Pro Fonts
+source_code_pro_fonts:
+  - name: source-code-pro
+    repo_url: https://github.com/adobe-fonts/source-code-pro.git
+
+### Packages
+font_packages:
+  - fonts-cantarell
+  - fonts-dejavu
+  - fonts-dejavu-core
+  - fonts-dejavu-extra
+  - fonts-firacode
+  - fonts-font-awesome
+  - fonts-freefont-otf
+  - fonts-freefont-ttf
+  - fonts-inconsolata
+  - fonts-liberation
+  - fonts-liberation2
+  - fonts-noto
+  - fonts-noto-core
+  - fonts-opensymbol
+  - fonts-powerline
+  - fonts-roboto
+  - fonts-roboto-unhinted
+  - fonts-symbola
+
+# Packages
+
+### kitty, gnome-terminal
+default_terminal_emulator: kitty
+
+general_gnome_packages:
+  - gnome-session
+  - gnome-text-editor
+  - gnome-screenshot
+  - gdm3
+  - "{{ default_terminal_emulator }}"
+
+gnome_shell_extension_packages:
+  - gnome-shell-extensions
+  - gnome-shell-extension-manager
+  - gnome-shell-extension-tiling-assistant
+  - gnome-shell-extension-appindicator
+  - gnome-shell-extension-caffeine
+  - gnome-shell-extension-dashtodock
+  - gnome-shell-extensions-extra
+
+gnome_power_management_packages:
+  - powermgmt-base
+  - power-profiles-daemon
+
+gnome_network_manager_packages:
+  - network-manager-gnome
+  - network-manager-openvpn-gnome
+
+gnome_bluetooth_support_packages:
+  - rfkill
+  - bluez
+  - bluez-tools
+  - gnome-bluetooth-sendto
+
+gnome_additional_utility_packages:
+  - eog
+  - evince
+  - gnome-calculator
+  - gnome-disk-utility
+  - gnome-system-monitor
+  - gnome-keyring
+  - gnome-keyring-pkcs11
+  - libpam-gnome-keyring
+  - xdg-utils
+  # for pass
+  - wl-clipboard
+
+nautilus_additional_packages:
+  # - nautilus-wipe
+  # for thumbnails
+  - libgdk-pixbuf2.0-bin
+  - libavif-gdk-pixbuf
+
+network_utility_packages:
+  - remmina
+  - remmina-plugin-rdp
+  - remmina-plugin-vnc
+  - remmina-plugin-x2go
+  - firefox-esr
+  - thunderbird
+
+multimedia_utility_packages:
+  # - mpv
+  - celluloid
+  - cmus
+
+# Office
+office: "{{ OFFICE | default(false) }}"
+
+### Packages
+spelling_packages:
+  - aspell-en
+  - aspell-ru
+  - hunspell-en-us
+  - hunspell-ru
+
+office_packages:
+  - libreoffice-gtk3
+  - libreoffice-calc
+  - libreoffice-writer
+  - libreoffice-style-colibre
+
+# Hypervisor
+hypervisor: "{{ HYPERVISOR | default(false) }}"
+
+### Packages
+hypervisor_packages:
+  - libvirt-clients
+  - libvirt-daemon-system
+  - libvirt-daemon
+  - qemu-kvm
+  - qemu-utils
+  - virtinst
+  - virt-manager
+  - bridge-utils
+  - dnsmasq
+  - gir1.2-spiceclientgtk-3.0
+  - ovmf
+
+### User groups
+hypervisor_user_groups:
+  - libvirt
+  - libvirt-qemu

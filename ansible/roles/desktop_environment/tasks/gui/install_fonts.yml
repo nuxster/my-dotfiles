@@ -1,0 +1,46 @@
+- name: Install fonts
+  become: true
+  block:
+    - name: Install fonts | Install font packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop:
+        - "{{ font_packages }}"
+
+    - name: Install fonts | Deleting downloaded packages that are no longer required
+      ansible.builtin.apt:
+        clean: true
+
+    - name: Install fonts | Installing and configuring custom fonts
+      become_user: "{{ USERNAME }}"
+      block:
+        - name: Install fonts | Installing and configuring custom fonts | Create user fonts directory
+          ansible.builtin.file:
+            path: "{{ [lookup('env','HOME'), user_fonts_dir] | path_join }}"
+            state: directory
+            recurse: true
+            mode: '0755'
+
+        - name: Install fonts | Installing and configuring custom fonts | Download Nerd Fonts
+          ansible.builtin.get_url:
+            url: "{{ [nerd_fonts_repo_url, item] | path_join +'.zip'}}"
+            dest: "{{ tmp_dir }}"
+            mode: '0755'
+          loop: "{{ nerd_fonts }}"
+
+        - name: Install fonts | Installing and configuring custom fonts | Unarchive Nerd Fonts
+          ansible.builtin.unarchive:
+            src: "{{ [tmp_dir, item] | path_join +'.zip'}}"
+            dest: "{{ [lookup('env','HOME'), user_fonts_dir] | path_join }}"
+            remote_src: true
+          loop: "{{ nerd_fonts }}"
+
+        - name: Install fonts | Installing and configuring custom fonts | Clone Source Code Pro Fonts
+          ansible.builtin.git:
+            repo: "{{ item.repo_url }}"
+            dest: "{{ [lookup('env','HOME'), user_fonts_dir, item.name] | path_join }}"
+            update: false
+          with_items:
+            - "{{ source_code_pro_fonts }}"

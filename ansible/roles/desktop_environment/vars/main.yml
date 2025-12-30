@@ -1,0 +1,30 @@
+---
+# User
+
+### Gnome user autologin settings
+gnome_autologin_configuration_file: /etc/gdm3/daemon.conf
+gnome_autologin_options:
+  AutomaticLoginEnable: AutomaticLoginEnable=True
+  AutomaticLogin: AutomaticLogin={{ USERNAME }}
+
+### Fonts
+user_fonts_dir: .fonts
+
+### Dotfiles
+user_dotfiles:
+  - .config
+  #- .ssh
+
+### Gnome
+gnome_autostart_directory: .config/autostart
+gnome_post_install_desktop_file: "{{ [gnome_autostart_directory, 'post_install.desktop'] | path_join }}"
+gnome_post_install_configure_script: "{{ [gnome_autostart_directory, 'post_install.sh'] | path_join }}"
+gnome_post_install_desktop_file_template: "{{ gnome_post_install_desktop_file }}.j2"
+gnome_post_install_configure_script_template: "{{ gnome_post_install_configure_script }}.j2"
+gnome_wallpaper_directory: .local/share/backgrounds
+gnome_wallpaper: "{{ [gnome_wallpaper_directory, 'Wallpaper01.jpg'] | path_join }}"
+
+### Avatar
+user_avatar_file: var/lib/AccountsService/icons/.face
+user_avatar_config_file: "{{ ['/var/lib/AccountsService/users', USERNAME] | path_join }}"
+user_avatar_config_file_template: var/lib/AccountsService/users/username.j2

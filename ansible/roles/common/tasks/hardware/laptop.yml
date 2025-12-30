@@ -1,0 +1,24 @@
+---
+- name: Configure laptop
+  when:
+    - destination_device == 'laptop'
+  become: true
+  block:
+    - name: Configure laptop | Install packages for laptop
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop: "{{ for_laptop_packages }}"
+    
+    - name: Configure laptop | Configure TLP
+      ansible.builtin.copy:
+        src: "etc/tlp.d/{{ tlp_config_file }}"
+        dest: "/etc/tlp.d/{{ tlp_config_file }}"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Configure laptop | TLP changed configuration apply
+      ansible.builtin.command:
+        cmd: /usr/sbin/tlp start

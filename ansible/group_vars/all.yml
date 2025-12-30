@@ -1,0 +1,40 @@
+---
+# CPU manufacturer: intel or amd
+CPU: intel
+
+# Is there an SSD device in the system
+SSD_DEVICES: true
+
+# Are you on: desktop, laptop or vm
+DESTINATION_DEVICE: desktop
+
+# The name of your user in the system
+USERNAME: nuxster
+
+# User's timezone
+TIMEZONE: Europe/Moscow
+
+# User's shell
+SHELL: fish
+SHELL_CONFIGURATION_FILES: .config/fish
+
+# The default text editor
+DEFAULT_TEXT_EDITOR_PACKAGE: neovim
+
+# Install Libre Office packages
+OFFICE: false
+
+# Install hypervisor (QEMU/Libvirt)
+HYPERVISOR: false
+
+# Upgrade all packages
+UPGRADE_PACKAGES: true
+
+# Install ntp daemon (ntpd/chrony) packages
+NTP_DAEMON: true
+
+# APT source mirror
+APT_SOURCE_MIRROR_URL: mirror.yandex.ru
+
+# Reconfigure network for network-manager-gnome
+RECONFIGURE_NETWORK: true

@@ -1,0 +1,11 @@
+---
+- name: Rewrite /etc/network/interfaces
+  when:
+    - reconfigure_network
+  become: true
+  ansible.builtin.template:
+    src: interfaces.tmpl
+    dest: /etc/network/interfaces
+    owner: root
+    group: root
+    mode: '0644'

@@ -1,0 +1,44 @@
+---
+- name: Install packages
+  become: true
+  block:
+    - name: Install packages | Install additional packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop:
+        - "{{ shell_package }}"
+        - "{{ archivators_packages }}"
+        - "{{ filesystems_utils_packages }}"
+        - "{{ certificates_gpg_packages }}"
+        - "{{ networking_packages }}"
+        - "{{ util_packages }}"
+        - "{{ user_software_packages }}"
+
+    - name: Install packages | Install the default text editor
+      when:
+        - default_text_editor_package != "nano"
+      block:
+        - name: Install packages | Install the default text editor | Install text editor package
+          ansible.builtin.apt:
+            name: "{{ default_text_editor_package }}"
+            state: present
+            install_recommends: false
+
+        - name: Install packages | Install the default text editor | Find the executable file of the default text editor
+          ansible.builtin.find:
+            paths:
+              - /usr/bin
+              - /usr/local/bin
+            file_type: file
+            name: "{{ 'nvim' if 'vim' in default_text_editor_package else default_text_editor_package }}"
+            recurse: false
+          register: path_to_default_text_editor
+
+        - name: Install packages | Install the default text editor | Set the default text editor
+          community.general.alternatives:
+            name: editor
+            path: "{{ path_to_default_text_editor.files[0].path }}"
+          when:
+            - path_to_default_text_editor.files | length > 0

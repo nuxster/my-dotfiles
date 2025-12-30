@@ -1,0 +1,137 @@
+---
+# General
+tmp_dir: /tmp
+
+timezone: "{{ TIMEZONE | default('Europe/Moscow') }}"
+ntp_daemon: "{{ NTP_DAEMON | default(true) | bool }}"
+
+# Users
+user_groups:
+  - users
+  - netdev
+  - plugdev
+  - dialout
+  - video
+  - audio
+  - sudo
+  - games
+
+ssh_configuration_files:
+  - config_ssh
+  - config
+  - environment
+
+ssh_config_ssh_parameters:
+  - 'IdentitiesOnly=yes' 
+  - 'RemoteCommand TERM=xterm $SHELL'
+  - 'RequestTTY yes'
+
+# Boot
+
+### Plymouth
+plymouth_default_theme: debian-slider
+plymouth_themes:
+  debian-slider: https://github.com/nuxster/debian-slider.git
+plymouth_packages:
+  - plymouth
+  - plymouth-themes
+
+# APT
+
+### Mirrors
+apt_source_mirror_url: "{{ APT_SOURCE_MIRROR_URL | default('deb.debian.org') }}"
+
+# Packages
+upgrade_packages: "{{ UPGRADE_PACKAGES | default(true) }}"
+install_neovim: "{{ INSTALL_NEOVIM | default(true) }}"
+
+### Kernel & kernel headers
+kernel_headers_packages:
+  - linux-headers-amd64
+  - build-essential
+  - dkms
+
+### Drivers
+amd_microcode: amd64-microcode
+intel_microcode: intel-microcode
+microcode_packages: "{{ intel_microcode if CPU == 'intel' else amd_microcode }}"
+firmware_packages:
+  - firmware-linux
+  - firmware-linux-free
+  - firmware-linux-nonfree
+  - firmware-misc-nonfree
+  - firmware-iwlwifi
+
+### Additional software
+archivators_packages: 
+  - zip
+  - unzip
+  - unrar
+  - p7zip-full
+
+filesystems_utils_packages:
+  - exfatprogs
+  - dosfstools
+  - ntfs-3g
+  - sshfs
+
+removable_packages_of_text_editors:
+  - vim-tiny
+  - vim-common
+
+default_text_editor_package: "{{ DEFAULT_TEXT_EDITOR_PACKAGE | default('nano') }}"
+
+certificates_gpg_packages:
+  - ca-certificates
+  - openssl
+  - gnupg2
+
+networking_packages:
+  - wget
+  - curl
+  - lynx
+  - nmap
+  - tcpdump
+  - rsync
+  - netcat-openbsd
+  - wpasupplicant
+
+util_packages:
+  - util-linux-extra
+
+user_software_packages:
+  - pass
+  - apg
+  - grc
+  - duf
+  - bpytop
+  - lsd
+  - ranger
+  - file
+  - htop
+  - ffmpeg
+  - tree
+  - sudo
+
+# Shell
+shell_package:
+  - "{{ SHELL | default('fish')}}"
+
+shell_configuration_files: "{{ '.config/fish' if shell_package == 'fish' else SHELL_CONFIGURATION_FILES }}"
+
+# Laptop
+destination_device: "{{ DESTINATION_DEVICE | default('laptop') }}"
+
+for_laptop_packages:
+  - brightnessctl
+  - brightness-udev
+  - pm-utils
+  - tlp
+
+tlp_config_file: 01-mytlp.conf
+
+# Networking
+reconfigure_network: "{{ RECONFIGURE_NETWORK | default(false) | bool }}"
+
+# SSD devices
+ssd_devices: "{{ SSD_DEVICES | default(true) | bool }}"

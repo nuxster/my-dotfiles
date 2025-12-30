@@ -1,0 +1,12 @@
+---
+- name: Install and configure GUI
+  ansible.builtin.include_tasks:
+    file: gui/main.yml
+
+- name: Install and configure office
+  ansible.builtin.include_tasks:
+    file: office/main.yml
+
+- name: Install and configure hypervisor
+  ansible.builtin.include_tasks:
+    file: hypervisor/main.yml

@@ -1,0 +1,23 @@
+---
+- name: Install desktop environment packages
+  become: true
+  block:
+    - name: Install desktop environment packages | Install desktop environment packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop:
+        - "{{ general_gnome_packages }}"
+        - "{{ gnome_shell_extension_packages }}"
+        - "{{ gnome_power_management_packages }}"
+        - "{{ gnome_network_manager_packages }}"
+        - "{{ gnome_bluetooth_support_packages }}"
+        - "{{ gnome_additional_utility_packages }}"
+        - "{{ nautilus_additional_packages }}"
+        - "{{ network_utility_packages }}"
+        - "{{ multimedia_utility_packages }}"
+
+    - name: Install desktop environment packages | Deleting downloaded packages that are no longer required
+      ansible.builtin.apt:
+        clean: true

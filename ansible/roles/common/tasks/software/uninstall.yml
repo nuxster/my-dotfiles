@@ -1,0 +1,12 @@
+---
+- name: Uninstall packages
+  become: true
+  block:
+    - name: Uninstall packages | Uninstall unnecessary packages
+      ansible.builtin.apt:
+        name: "{{ item }}" 
+        state: absent
+        autoremove: true
+        purge: true
+      loop:
+        - "{{ removable_packages_of_text_editors }}"

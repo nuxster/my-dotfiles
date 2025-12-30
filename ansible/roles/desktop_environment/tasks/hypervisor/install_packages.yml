@@ -1,0 +1,17 @@
+---
+- name: Install hypervisor
+  become: true
+  when:
+    - hypervisor
+  block:
+    - name: Install hypervisor | Install hypervisor packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop:
+        - "{{ hypervisor_packages }}"
+
+    - name: Install hypervisor | Deleting downloaded packages that are no longer required
+      ansible.builtin.apt:
+        clean: true

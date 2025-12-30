@@ -1,0 +1,26 @@
+---
+- name: Install and configure Plymouth
+  become: true
+  block:
+    - name: Install and configure Plymouth | Install packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: false
+      loop: "{{ plymouth_packages }}"
+
+    - name: Install and configure Plymouth | Configure Plymouth
+      ansible.builtin.git:
+        repo: "{{ item.value }}" 
+        dest: "{{ [tmp_dir, item.key] | path_join }}"
+        update: false
+        force: false
+      loop: "{{ lookup('ansible.builtin.dict', plymouth_themes, wantlist=true) }}"
+
+    - name: Install and configure Plymouth | Make plymouth theme
+      become: true
+      ansible.builtin.shell: 
+        cmd: |
+          cd {{ [tmp_dir, item.key] | path_join }}
+          make apply-now
+      loop: "{{ lookup('ansible.builtin.dict', plymouth_themes, wantlist=true) }}"

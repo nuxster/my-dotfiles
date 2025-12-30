@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+
+# Reset all Gnome settings
+gsettings list-schemas | xargs -n 1 gsettings reset-recursively
+
+# gnome-extensions list --enabled
+# gsettings list-recursively org.gnome.desktop.wm.keybindings
+
+# Activate Gnome shell extensions
+gnome-extensions enable caffeine@patapon.info
+gnome-extensions enable drive-menu@gnome-shell-extensions.gcampax.github.com
+gnome-extensions enable tiling-assistant@leleat-on-github
+gnome-extensions enable ubuntu-appindicators@ubuntu.com
+gnome-extensions enable dash-to-dock@micxgx.gmail.com
+
+# Set numbers of workspaces
+gsettings set org.gnome.desktop.wm.preferences num-workspaces 5
+# Switch to workspace
+gsettings set org.gnome.shell.keybindings switch-to-application-1 "[]"
+gsettings set org.gnome.shell.keybindings switch-to-application-2 "[]"
+gsettings set org.gnome.shell.keybindings switch-to-application-3 "[]"
+gsettings set org.gnome.shell.keybindings switch-to-application-4 "[]"
+gsettings set org.gnome.shell.keybindings switch-to-application-5 "[]"
+gsettings set org.gnome.shell.keybindings switch-to-application-6 "[]"
+gsettings set org.gnome.shell.keybindings switch-to-application-7 "[]"
+gsettings set org.gnome.shell.keybindings switch-to-application-8 "[]"
+gsettings set org.gnome.shell.keybindings switch-to-application-9 "[]"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Super>3']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 "['<Super>4']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-5 "['<Super>5']"
+# Move window to workspace
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Shift><Super>1']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Shift><Super>2']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 "['<Shift><Super>3']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-4 "['<Shift><Super>4']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-5 "['<Shift><Super>5']"
+# Close window
+gsettings set org.gnome.desktop.wm.keybindings close "['<Shift><Super>q']"
+# Switch keyboard layout
+gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('xkb', 'ru')]"
+gsettings set org.gnome.desktop.input-sources xkb-options "['grp:caps_toggle']"
+# Custom keybindings
+gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'Terminal'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "{{ default_terminal_emulator }}"
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding '<Super>return'
+# Centering windows
+gsettings set org.gnome.desktop.wm.keybindings move-to-center "['<Super><Shift>c']"
+
+# Default windows position and size
+# gsettings set org.gnome.mutter center-new-windows true
+gsettings set org.gnome.desktop.default-applications.terminal exec "gnome-terminal --geometry=235x15+0+900"
+
+# Configure Gnome shell extension "Tiling Assistant"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-top-half "['<Shift><Super>w']"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-bottom-half "['<Shift><Super>s']"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-topleft-quarter "['<Super>q']"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-topright-quarter "['<Super>e']"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-bottomleft-quarter "['<Super>z']"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-bottomright-quarter "['<Super>c']"
+# Windows settings
+gsettings set org.gnome.shell.extensions.tiling-assistant focus-hint 0
+gsettings set org.gnome.shell.extensions.tiling-assistant focus-hint 2
+gsettings set org.gnome.shell.extensions.tiling-assistant single-screen-gap 4
+gsettings set org.gnome.shell.extensions.tiling-assistant window-gap 4
+
+# Configure Gnome shell extension "Dash to Dock"
+gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
+gsettings get org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
+
+# Set Do Not Disturb status
+gsettings set org.gnome.desktop.notifications show-banners false
+
+# Configure Night mode
+gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
+gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-from 21.00
+gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-to 06.00
+gsettings set org.gnome.settings-daemon.plugins.color night-light-temperature 2500
+
+# Configure Gnome appearance
+gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark
+
+# Clock format
+gsettings set org.gnome.desktop.interface clock-format '24h'
+
+# Set wallpaper
+gsettings set org.gnome.desktop.background picture-opacity 100
+gsettings set org.gnome.desktop.background picture-options 'zoom'
+gsettings set org.gnome.desktop.background picture-uri 'file://{{ wallpaper }}'
+gsettings set org.gnome.desktop.background picture-uri-dark 'file://{{ wallpaper }}'
+
+# Never prompt or start programs on media insertion
+gsettings set org.gnome.desktop.media-handling autorun-never true
+
+# Configure Nautilus
+gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
+
+gsettings set org.gtk.Settings.FileChooser sort-directories-first true
+gsettings set org.gtk.gtk4.Settings.FileChooser sort-directories-first true
+
+# Set favorite apps
+gsettings set org.gnome.shell favorite-apps "['firefox-esr.desktop', 'thunderbird.desktop', 'remmina-gnome.desktop', 'org.gnome.Nautilus.desktop', 'kitty.desktop', 'code.desktop']"
+
+# Disable logout prompt
+# gsettings set org.gnome.SessionManager logout-prompt false
+
+rm -rf {{ post_install_desktop_file }}
+rm -rf {{ post_install_script }}

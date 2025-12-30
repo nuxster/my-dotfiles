@@ -1,0 +1,36 @@
+---
+- name: Configure super user
+  become: true
+  block:
+    - name: Configure super user | Super user configure shell
+      block:
+        - name: Configure super user | Super user configure shell | Copy shell configuration files
+          ansible.builtin.copy:
+            src: "{{ shell_configuration_files }}"
+            dest: "{{ ['/root', '.config'] | path_join }}"
+            owner: root
+            group: root
+
+        - name: Configure super user | Super user configure shell | Set default shell for superuser
+          ansible.builtin.user:
+            name: root
+            shell: "/usr/bin/{{ SHELL }}" 
+
+    - name: Configure super user | Super user configure ssh
+      block:
+        - name: Configure super user | Super user configure ssh | Create ~/.ssh
+          ansible.builtin.file:
+            path: "{{ ['/root', '.ssh'] | path_join }}"
+            state: directory
+            owner: root
+            group: root
+            mode: '0755'
+
+        - name: Configure super user | Super user configure ssh | Create root ssh configuration files
+          ansible.builtin.file:
+            path: "{{ ['/root', '.ssh', item] | path_join }}"
+            state: touch
+            owner: root
+            group: root
+            mode: '0600'
+          loop: "{{ ssh_configuration_files }}"
