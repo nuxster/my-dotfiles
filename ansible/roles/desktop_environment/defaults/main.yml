@@ -50,6 +50,7 @@ general_gnome_packages:
   - gnome-session
   - gnome-text-editor
   - gnome-screenshot
+  - gnome-themes-extra-data
   - gdm3
   - "{{ default_terminal_emulator }}"
 
@@ -138,6 +139,7 @@ hypervisor_packages:
   - virt-manager
   - bridge-utils
   - dnsmasq
+  - gir1.2-ayatanaappindicator3-0.1
   - gir1.2-spiceclientgtk-3.0
   - ovmf
 
