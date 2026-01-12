@@ -39,7 +39,7 @@ gnome-extensions enable runcat@kolesnikov.se
 # Ranger
 ```shell
 ranger --copy-config=all
-vim /home/$USERNAME/.config/ranger/rc.conf
+vim ~/.config/ranger/rc.conf
 
 set preview_script ~/.config/ranger/scope.sh
 set colorscheme solarized
@@ -52,5 +52,11 @@ set preview_images_method kitty
 sudo apt install python3-pil
 
 #! Image preview does not work in tmux session yet !
+
+# Set a program that opens files of a certain type
+vim ~/.config/ranger/rifle.conf 
+
+# Example for video files
+mime ^video,       has celluloid, X, flag f = celluloid -- "$@"
 
 ```
