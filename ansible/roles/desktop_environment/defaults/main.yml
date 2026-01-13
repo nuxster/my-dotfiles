@@ -75,6 +75,8 @@ gnome_bluetooth_support_packages:
   - rfkill
   - bluez
   - bluez-tools
+  - bluez-obexd
+  - blueman
   - gnome-bluetooth-sendto
 
 gnome_additional_utility_packages:
