@@ -106,6 +106,9 @@ gsettings set org.gtk.gtk4.Settings.FileChooser sort-directories-first true
 # Set favorite apps
 gsettings set org.gnome.shell favorite-apps "['firefox-esr.desktop', 'thunderbird.desktop', 'remmina-gnome.desktop', 'org.gnome.Nautilus.desktop', 'kitty.desktop', 'code.desktop']"
 
+# Disable blueman status icon
+gsettings set org.blueman.general plugin-list "['!ShowConnected', '!StatusIcon']"
+
 # Disable logout prompt
 # gsettings set org.gnome.SessionManager logout-prompt false
 

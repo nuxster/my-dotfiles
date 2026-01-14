@@ -2,19 +2,26 @@
 - name: Install packages
   become: true
   block:
+    - name: Install packages | Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600  # 1h
+
     - name: Install packages | Install additional packages
       ansible.builtin.apt:
-        name: "{{ item }}"
+        name: "{{ all_additional_packages | flatten }}"
         state: present
         install_recommends: false
-      loop:
-        - "{{ shell_package }}"
-        - "{{ archivators_packages }}"
-        - "{{ filesystems_utils_packages }}"
-        - "{{ certificates_gpg_packages }}"
-        - "{{ networking_packages }}"
-        - "{{ util_packages }}"
-        - "{{ user_software_packages }}"
+      vars:
+        all_additional_packages: [
+          "{{ shell_package }}",
+          "{{ archivators_packages }}",
+          "{{ filesystems_utils_packages }}",
+          "{{ certificates_gpg_packages }}",
+          "{{ networking_packages }}",
+          "{{ util_packages }}",
+          "{{ user_software_packages }}",
+        ]
 
     - name: Install packages | Install the default text editor
       when:
