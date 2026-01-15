@@ -76,8 +76,8 @@ gnome_bluetooth_support_packages:
   - bluez
   - bluez-tools
   - bluez-obexd
-  - blueman
-  - gnome-bluetooth-sendto
+  # - blueman
+  # - gnome-bluetooth-sendto
 
 gnome_additional_utility_packages:
   - eog
@@ -93,10 +93,11 @@ gnome_additional_utility_packages:
   - wl-clipboard
 
 nautilus_additional_packages:
-  # - nautilus-wipe
+  - nautilus-wipe
   # for thumbnails
   - libgdk-pixbuf2.0-bin
   - libavif-gdk-pixbuf
+  - ffmpegthumbnailer
 
 network_utility_packages:
   - remmina
