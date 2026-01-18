@@ -103,11 +103,15 @@ gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
 gsettings set org.gtk.Settings.FileChooser sort-directories-first true
 gsettings set org.gtk.gtk4.Settings.FileChooser sort-directories-first true
 
+# Set accent color
+# get current accent color: gsettings get org.gnome.desktop.interface accent-color
+gsettings set org.gnome.desktop.interface accent-color 'slate'
+
 # Set favorite apps
 gsettings set org.gnome.shell favorite-apps "['firefox-esr.desktop', 'thunderbird.desktop', 'remmina-gnome.desktop', 'org.gnome.Nautilus.desktop', 'kitty.desktop', 'code.desktop']"
 
 # Disable blueman status icon
-gsettings set org.blueman.general plugin-list "['!ShowConnected', '!StatusIcon']"
+# gsettings set org.blueman.general plugin-list "['!ShowConnected', '!StatusIcon']"
 
 # Disable logout prompt
 # gsettings set org.gnome.SessionManager logout-prompt false
