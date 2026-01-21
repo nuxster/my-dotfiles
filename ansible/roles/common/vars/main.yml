@@ -5,6 +5,12 @@
 grub_cmdline_linux_default: "{{ 'quiet splash acpi_backlight=native' if DESTINATION_DEVICE == 'laptop' else 'quiet splash' }}"
 grub_default_config: /etc/default/grub
 
+# Shell
+shell_package_name: zsh
+shell_config: .zshrc
+oh_my_zsh_tmp: /tmp/.oh-my-zsh
+my_zsh_theme_file: jispwoso-nuxster.zsh-theme
+
 # Sysctl
 
 ### SDD

@@ -6,20 +6,30 @@
     owner: "{{ USERNAME }}"
     group: "{{ USERNAME }}"
 
-- name: Copy shell configuration files
-  ansible.builtin.copy:
-    src: "{{ shell_configuration_files }}"
-    dest: "{{ [lookup('env','HOME'), '.config'] | path_join }}"
-    owner: "{{ USERNAME }}"
-    group: "{{ USERNAME }}"
-
-- name: Add user to groups and set shell
+- name: Add user to groups and set default shell
   become: true
   ansible.builtin.user:
     name: "{{ USERNAME }}"
-    shell: "/usr/bin/{{ SHELL }}"
+    shell: "/usr/bin/{{ shell_package_name }}"
     groups: "{{ user_groups }}"
     append: true
+
+- name: Copy shell config file to user home directory
+  ansible.builtin.copy:
+    src: "{{ shell_config }}"
+    dest: "{{ [lookup('env','HOME'), shell_config] | path_join }}"
+    owner: "{{ USERNAME }}"
+    group: "{{ USERNAME }}"
+    mode: '0600'
+
+- name: Copy oh-my-zsh config files to user home directory
+  ansible.posix.synchronize:
+    src: "{{ oh_my_zsh_tmp }}"
+    dest: "{{ lookup('env','HOME') }}"
+    delete: yes
+    rsync_opts:
+      - "--exclude=.git"
+      - "--chown={{ USERNAME }}:{{ USERNAME }}"
 
 - name: Configure sudoers
   become: true

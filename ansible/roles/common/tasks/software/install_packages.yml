@@ -14,7 +14,6 @@
         install_recommends: false
       vars:
         all_additional_packages: [
-          "{{ shell_package }}",
           "{{ archivators_packages }}",
           "{{ filesystems_utils_packages }}",
           "{{ certificates_gpg_packages }}",

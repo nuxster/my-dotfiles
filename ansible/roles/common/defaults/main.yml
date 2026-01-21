@@ -1,6 +1,9 @@
 ---
 # General
 tmp_dir: /tmp
+homes:
+  - { name: root, home: /root }
+  - { name: "{{ USERNAME }}", home: "{{ lookup('env','HOME') }}" }
 
 timezone: "{{ TIMEZONE | default('Europe/Moscow') }}"
 ntp_daemon: "{{ NTP_DAEMON | default(true) | bool }}"
@@ -112,12 +115,6 @@ user_software_packages:
   - ffmpeg
   - tree
   - sudo
-
-# Shell
-shell_package:
-  - "{{ SHELL | default('fish')}}"
-
-shell_configuration_files: "{{ '.config/fish' if shell_package == 'fish' else SHELL_CONFIGURATION_FILES }}"
 
 # Laptop
 destination_device: "{{ DESTINATION_DEVICE | default('laptop') }}"

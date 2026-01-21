@@ -14,10 +14,6 @@ USERNAME: nuxster
 # User's timezone
 TIMEZONE: Europe/Moscow
 
-# User's shell
-SHELL: fish
-SHELL_CONFIGURATION_FILES: .config/fish
-
 # The default text editor
 DEFAULT_TEXT_EDITOR_PACKAGE: neovim
 
