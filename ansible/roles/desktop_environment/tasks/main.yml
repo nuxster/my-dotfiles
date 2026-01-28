@@ -10,3 +10,7 @@
 - name: Install and configure hypervisor
   ansible.builtin.include_tasks:
     file: hypervisor/main.yml
+
+- name: Configure networking
+  ansible.builtin.include_tasks:
+    file: networking/main.yml

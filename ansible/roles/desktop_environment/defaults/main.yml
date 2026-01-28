@@ -150,3 +150,6 @@ hypervisor_packages:
 hypervisor_user_groups:
   - libvirt
   - libvirt-qemu
+
+# Networking
+reconfigure_network: "{{ RECONFIGURE_NETWORK | default(false) | bool }}"

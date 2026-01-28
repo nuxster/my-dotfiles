@@ -11,10 +11,6 @@
   ansible.builtin.include_tasks:
     file: boot/main.yml
 
-- name: Configure networking
-  ansible.builtin.include_tasks:
-    file: networking/main.yml
-
 - name: Configure users
   ansible.builtin.include_tasks:
     file: users/main.yml

@@ -127,8 +127,5 @@ for_laptop_packages:
 
 tlp_config_file: 01-mytlp.conf
 
-# Networking
-reconfigure_network: "{{ RECONFIGURE_NETWORK | default(false) | bool }}"
-
 # SSD devices
 ssd_devices: "{{ SSD_DEVICES | default(true) | bool }}"
